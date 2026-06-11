@@ -1,0 +1,336 @@
+.card {
+  background-color: var(--surface);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* 头部 */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.badge {
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  background-color: var(--bg);
+  border-radius: 20px;
+}
+
+/* 列表 */
+.list {
+  padding: 4px 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.item {
+  border-bottom: 1px solid transparent;
+}
+
+.item:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Top 1-3 强调样式 */
+.top1 {
+  background: linear-gradient(90deg, rgba(230, 22, 45, 0.08) 0%, transparent 100%);
+  border-left: 3px solid #e6162d;
+}
+
+.top2 {
+  background: linear-gradient(90deg, rgba(249, 115, 22, 0.06) 0%, transparent 100%);
+  border-left: 3px solid #f97316;
+}
+
+.top3 {
+  background: linear-gradient(90deg, rgba(234, 179, 8, 0.05) 0%, transparent 100%);
+  border-left: 3px solid #eab308;
+}
+
+.top1 .title,
+.top2 .title,
+.top3 .title {
+  font-weight: 600;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  min-height: 40px;
+}
+
+.rank {
+  width: 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Top 1-3 Rank 数字强调 */
+.rankTop {
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white !important;
+}
+
+.top1 .rankTop {
+  background-color: #e6162d;
+}
+
+.top2 .rankTop {
+  background-color: #f97316;
+}
+
+.top3 .rankTop {
+  background-color: #eab308;
+}
+
+.title {
+  flex: 1;
+  font-size: var(--font-size-body);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item:hover .title {
+  color: var(--accent-weibo);
+}
+
+.heat {
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.tag {
+  padding: 1px 6px;
+  font-size: 10px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* 底部 */
+.footer {
+  padding: 8px 16px 10px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  background-color: var(--surface);
+}
+
+/* ========== Loading 骨架屏 ========== */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeletonBase {
+  background: linear-gradient(
+    90deg,
+    var(--border) 25%,
+    #e8eaed 50%,
+    var(--border) 75%
+  );
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeletonIcon {
+  composes: skeletonBase;
+  background-color: #ddd;
+}
+
+.skeletonText {
+  composes: skeletonBase;
+  height: 14px;
+}
+
+.skeletonName {
+  width: 60px;
+}
+
+.skeletonFooter {
+  width: 100px;
+  height: 12px;
+}
+
+.skeletonItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  min-height: 40px;
+}
+
+.skeletonRank {
+  composes: skeletonBase;
+  width: 20px;
+  height: 16px;
+}
+
+.skeletonTitle {
+  composes: skeletonBase;
+  flex: 1;
+  height: 14px;
+}
+
+.skeletonHeat {
+  composes: skeletonBase;
+  width: 40px;
+  height: 12px;
+}
+
+/* ========== Error 错误状态 ========== */
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  flex: 1;
+  gap: 12px;
+}
+
+.errorIcon {
+  font-size: 32px;
+  margin: 0;
+}
+
+.errorMessage {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0;
+}
+
+.retryBtn {
+  margin-top: 8px;
+  padding: 8px 20px;
+  background-color: var(--btn-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retryBtn:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+/* 移动端适配 */
+@media (max-width: 560px) {
+  .link {
+    padding: 10px 16px;
+    min-height: 44px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .heat {
+    font-size: 12px;
+  }
+
+  .tag {
+    font-size: 11px;
+  }
+
+  .error {
+    padding: 40px 16px;
+  }
+}
+
+/* ========== Empty 空数据状态 ========== */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  flex: 1;
+  gap: 8px;
+}
+
+.emptyIcon {
+  font-size: 32px;
+  margin: 0;
+}
+
+.emptyText {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* 触摸设备适配 */
+@media (hover: none) {
+  .item:hover {
+    background-color: transparent;
+  }
+
+  .item:active {
+    background-color: var(--hover-bg);
+  }
+
+  .retryBtn:active {
+    opacity: 0.9;
+  }
+}

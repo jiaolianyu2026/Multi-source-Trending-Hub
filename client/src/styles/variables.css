@@ -1,0 +1,62 @@
+:root {
+  /* 基础色系 */
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --border: #e8eaed;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+
+  /* 平台品牌色 */
+  --accent-zhihu: #0084ff;
+  --accent-bilibili: #fb7299;
+  --accent-weibo: #e6162d;
+
+  /* 排名标识色 */
+  --rank-1: #e6162d;
+  --rank-2: #f97316;
+  --rank-3: #eab308;
+  --rank-other: #9ca3af;
+
+  /* UI元素色 */
+  --btn-primary: #1d6bf6;
+  --btn-primary-hover: #1a5fd9;
+  --hover-bg: #f9fafb;
+  --user-msg-bg: #e8f4fd;
+  --ai-msg-bg: #ffffff;
+
+  /* 阴影 */
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* 间距 */
+  --page-padding: 20px;
+  --card-gap: 16px;
+  --header-height: 56px;
+  --tab-height: 48px;
+
+  /* 字体大小 */
+  --font-size-title: 20px;
+  --font-size-body: 13.5px;
+  --font-size-small: 11px;
+}
+
+/* 平板端 */
+@media (min-width: 561px) and (max-width: 1199px) {
+  :root {
+    --page-padding: 16px;
+    --font-size-title: 19px;
+    --font-size-body: 14px;
+  }
+}
+
+/* 手机端 */
+@media (max-width: 560px) {
+  :root {
+    --page-padding: 12px;
+    --card-gap: 12px;
+    --font-size-title: 18px;
+    --font-size-body: 14px;
+    --font-size-small: 11px;
+  }
+}
