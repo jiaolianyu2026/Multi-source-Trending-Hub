@@ -52,9 +52,9 @@ export function PlatformView() {
 
   return (
     <div className={styles.grid}>
-      <HotCard platform={data.zhihu} />
-      <HotCard platform={data.bilibili} />
-      <HotCard platform={data.weibo} />
+      <HotCard data={data.zhihu} />
+      <HotCard data={data.bilibili} />
+      <HotCard data={data.weibo} />
     </div>
   );
 }

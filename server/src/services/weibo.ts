@@ -39,9 +39,9 @@ interface WeiboHotItem {
  *
  * 关键字段说明：
  * - realtime: 热搜列表数组
- *   - rank: 排名（1, 2, 3...）
+ *   - rank: 排名（从0开始）
  *   - word: 热搜标题
- *   - raw_hot: 热度值（数字）
+ *   - num: 热度值（数字）
  *   - category: 分类标签（如"新","热","爆"）
  *   - link: 跳转链接（相对路径）
  */
@@ -50,12 +50,16 @@ interface WeiboApiResponse {
     realtime?: Array<{
       rank?: number;        // 排名
       word?: string;        // 热搜标题
-      raw_hot?: number;     // 热度值
+      num?: number;         // 热度值
       category?: string;    // 分类
       link?: string;        // 链接
     }>;
   };
 }
+
+// 测试用：模拟失败开关（通过环境变量控制）
+// 使用方式：MOCK_FAIL_WEIBO=1 npm run dev
+const MOCK_FAIL = process.env.MOCK_FAIL_WEIBO === '1';
 
 /**
  * 抓取微博热搜
@@ -64,6 +68,11 @@ interface WeiboApiResponse {
  * @throws 抓取失败时抛出错误
  */
 export async function fetchWeiboHot(): Promise<WeiboHotItem[]> {
+  // 测试用：模拟微博抓取失败
+  if (MOCK_FAIL) {
+    throw new Error('模拟微博API失败: 503 Service Unavailable (测试用)');
+  }
+
   try {
     const response = await fetch(WEIBO_API_URL, {
       method: 'GET',
@@ -74,7 +83,7 @@ export async function fetchWeiboHot(): Promise<WeiboHotItem[]> {
       throw new Error(`HTTP 错误: ${response.status} ${response.statusText}`);
     }
 
-    const result: WeiboApiResponse = await response.json();
+    const result = await response.json() as WeiboApiResponse;
 
     // 验证数据结构
     if (!result.data?.realtime || !Array.isArray(result.data.realtime)) {
@@ -85,15 +94,15 @@ export async function fetchWeiboHot(): Promise<WeiboHotItem[]> {
     // 字段映射：
     // - rank  → rank（排名，微博API从0开始，需要+1转为从1开始）
     // - word  → title（标题）
-    // - raw_hot → heat（热度值）
+    // - num   → heat（热度值）
     // - link  → url（跳转链接）
     const items: WeiboHotItem[] = result.data.realtime
-      .slice(0, 50) // 只取前 50 条
+      .slice(0, 10) // 只取前 10 条
       .map((item, index) => {
         // 微博API rank 从0开始，需要+1以匹配前端样式（1,2,3名有特殊样式）
         const rank = item.rank !== undefined ? item.rank + 1 : index + 1;
         const title = item.word ?? '无标题';
-        const heat = item.raw_hot ?? 0;
+        const heat = item.num ?? 0;
 
         // 构建完整 URL
         // link 字段是相对路径，如 "/weibo?q=xxx"，需要补全域名

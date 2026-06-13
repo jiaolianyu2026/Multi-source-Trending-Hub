@@ -10,9 +10,20 @@ export function Home() {
       {/* 顶栏 */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
-          <div className={styles.brand}>
-            <span className={styles.logo}>🔥</span>
-            <h1 className={styles.title}>迷你今日热榜</h1>
+          <div className={styles.headerTop}>
+            <div className={styles.brand}>
+              <span className={styles.logo}>🔥</span>
+              <h1 className={styles.title}>迷你今日热榜</h1>
+            </div>
+            <button
+              className={`${styles.refreshBtn} ${loading ? styles.refreshing : ''}`}
+              onClick={refetch}
+              disabled={loading}
+              title="刷新数据"
+            >
+              <span className={styles.refreshIcon}>🔄</span>
+              <span className={styles.refreshText}>{loading ? '刷新中...' : '刷新'}</span>
+            </button>
           </div>
           <p className={styles.subtitle}>一站式浏览知乎、B站、微博热门话题</p>
         </div>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>响应式测试工具</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .iframe-container {
+      border: 2px solid #333;
+      margin: 20px auto;
+      background: white;
+      position: relative;
+    }
+    .iframe-header {
+      background: #333;
+      color: white;
+      padding: 8px 12px;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    iframe {
+      width: 100%;
+      height: 800px;
+      border: none;
+      display: block;
+    }
+    .sizes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .size-btn {
+      padding: 12px;
+      background: #0084ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .size-btn:hover {
+      background: #0073e6;
+    }
+    .size-btn.active {
+      background: #005bb5;
+    }
+    .info {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .info h3 {
+      margin-top: 0;
+    }
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+    .checklist li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .checklist li:before {
+      content: "☐ ";
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📱 响应式布局测试工具</h1>
+
+    <div class="info">
+      <h3>项目断点定义</h3>
+      <ul>
+        <li><strong>手机</strong>: &lt;560px - 单列，间距12px</li>
+        <li><strong>平板</strong>: 560-1199px - 双列，间距16px</li>
+        <li><strong>桌面</strong>: ≥1200px - 三列，间距16px</li>
+      </ul>
+    </div>
+
+    <h3>点击按钮切换尺寸</h3>
+    <div class="sizes">
+      <button class="size-btn" onclick="setSize(375, 667, 'iPhone SE')">iPhone SE (375px)</button>
+      <button class="size-btn" onclick="setSize(390, 844, 'iPhone 12 Pro')">iPhone 12 Pro (390px)</button>
+      <button class="size-btn" onclick="setSize(393, 851, 'Pixel 5')">Pixel 5 (393px)</button>
+      <button class="size-btn" onclick="setSize(560, 900, '临界值 560px')">临界值 560px</button>
+      <button class="size-btn" onclick="setSize(768, 1024, 'iPad Mini')">iPad Mini (768px)</button>
+      <button class="size-btn" onclick="setSize(1200, 800, '桌面 1200px')">桌面 1200px</button>
+    </div>
+
+    <div class="iframe-container" id="iframeContainer">
+      <div class="iframe-header">
+        <span id="deviceName">iPhone SE</span>
+        <span id="deviceSize">375 × 667</span>
+      </div>
+      <iframe id="testFrame" src="http://localhost:5173"></iframe>
+    </div>
+
+    <div class="info">
+      <h3>📋 移动端检查清单</h3>
+      <ul class="checklist">
+        <li>标题和热度正常显示，不换行</li>
+        <li>排名数字（1/2/3名）有颜色区分</li>
+        <li>三个卡片垂直排列</li>
+        <li>点击区域足够大（最小44px）</li>
+        <li>字体大小合适（标题18px，正文14px）</li>
+        <li>底部更新时间可见</li>
+        <li>卡片间距12px</li>
+        <li>左右边距合适（不贴边）</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function setSize(width, height, name) {
+      const container = document.getElementById('iframeContainer');
+      const frame = document.getElementById('testFrame');
+      const nameEl = document.getElementById('deviceName');
+      const sizeEl = document.getElementById('deviceSize');
+
+      container.style.width = width + 'px';
+      frame.style.height = height + 'px';
+      nameEl.textContent = name;
+      sizeEl.textContent = width + ' × ' + height;
+
+      // 更新按钮状态
+      document.querySelectorAll('.size-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    // 默认设置为 iPhone SE
+    setSize(375, 667, 'iPhone SE');
+  </script>
+</body>
+</html>

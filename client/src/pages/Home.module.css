@@ -11,6 +11,9 @@
   background-color: var(--surface);
   border-bottom: 1px solid var(--border);
   padding: 16px var(--page-padding);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .headerContent {
@@ -21,10 +24,18 @@
   gap: 8px;
 }
 
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex: 1;
 }
 
 .logo {
@@ -42,6 +53,42 @@
   font-size: 14px;
   color: var(--text-secondary);
   margin: 0;
+}
+
+/* 刷新按钮 */
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: var(--btn-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.refreshBtn:hover:not(:disabled) {
+  background-color: var(--btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+.refreshBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.refreshing .refreshIcon {
+  animation: spin 1s linear infinite;
+}
+
+.refreshIcon {
+  font-size: 14px;
+  display: inline-block;
 }
 
 /* 主区域 */
@@ -84,6 +131,11 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* 刷新按钮旋转动画 */
+.refreshIcon {
+  display: inline-block;
 }
 
 .loadingText {
@@ -172,36 +224,75 @@
 /* 手机端：1列 */
 @media (max-width: 560px) {
   .header {
-    padding: 14px var(--page-padding);
+    padding: 12px var(--page-padding);
+  }
+
+  .headerTop {
+    gap: 8px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .logo {
+    font-size: 24px;
   }
 
   .title {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .subtitle {
+    font-size: 12px;
+  }
+
+  .refreshBtn {
+    padding: 6px 12px;
     font-size: 13px;
+    gap: 4px;
+  }
+
+  .refreshText {
+    display: none; /* 手机端隐藏文字，只显示图标 */
   }
 
   .grid {
     grid-template-columns: 1fr;
+    gap: 12px; /* 手机端减小卡片间距 */
+  }
+
+  .main {
+    padding: 12px var(--page-padding);
   }
 
   .loadingContainer,
   .errorContainer {
-    padding: 80px 20px;
+    padding: 60px 16px;
   }
 
   .spinner {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 
   .errorIcon {
-    font-size: 40px;
+    font-size: 36px;
   }
 
   .footer {
-    padding: 20px var(--page-padding);
+    padding: 16px var(--page-padding);
+  }
+
+  .disclaimer {
+    font-size: 12px;
+  }
+
+  .source {
+    font-size: 11px;
+  }
+
+  .copyright {
+    font-size: 10px;
   }
 }

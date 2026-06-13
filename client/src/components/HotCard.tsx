@@ -1,5 +1,6 @@
 import styles from './HotCard.module.css';
 import type { HotCardProps, HotSearchItem } from '../types/hot';
+import { formatRelativeTime } from '../utils/time';
 
 // 平台配置（仅用于图标和颜色）
 const PLATFORM_CONFIG: Record<string, { icon: string; color: string }> = {
@@ -14,17 +15,6 @@ function getRankColor(rank: number): string {
   if (rank === 2) return '#f97316';
   if (rank === 3) return '#eab308';
   return '#9ca3af';
-}
-
-// 格式化时间
-function formatTime(isoString: string): string {
-  const date = new Date(isoString);
-  const now = new Date();
-  const diff = Math.floor((now.getTime() - date.getTime()) / 1000 / 60);
-  if (diff < 1) return '刚刚';
-  if (diff < 60) return `${diff}分钟前`;
-  if (diff < 1440) return `${Math.floor(diff / 60)}小时前`;
-  return `${Math.floor(diff / 1440)}天前`;
 }
 
 // 骨架屏组件
@@ -181,7 +171,7 @@ export function HotCard({
         </div>
       ) : (
         <ul className={styles.list}>
-          {platform.items.slice(0, 15).map((item) => (
+          {platform.items.map((item) => (
             <ListItem key={item.rank} item={item} />
           ))}
         </ul>
@@ -194,7 +184,7 @@ export function HotCard({
         - 如需刷新数据，可添加 ?refresh=1 查询参数
       */}
       <div className={styles.footer}>
-        <span>更新于 {formatTime(platform.updatedAt)}</span>
+        <span>更新于 {formatRelativeTime(platform.updatedAt)}</span>
       </div>
     </div>
   );

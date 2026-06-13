@@ -18,6 +18,10 @@ const DESKTOP_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKi
 // 从环境变量读取 Cookie，如果没有则使用空值（会导致401错误）
 const ZHIHU_COOKIE = process.env.ZHIHU_COOKIE || '_zap=; d_c0=;';
 
+// 测试用：模拟失败开关（通过环境变量控制）
+// 使用方式：MOCK_FAIL_ZHIHU=1 npm run dev
+const MOCK_FAIL = process.env.MOCK_FAIL_ZHIHU === '1';
+
 // 请求头配置
 const REQUEST_HEADERS = {
   'User-Agent': DESKTOP_USER_AGENT,
@@ -48,9 +52,8 @@ interface ZhihuHotItem {
  *
  * 关键字段说明（与 TECH_DESIGN.md 一致）：
  * - data: 热榜列表数组
- *   - target: 问题详情
- *     - id: 问题ID
- *     - title: 问题标题
+ *   - target: 内容详情
+ *     - title: 标题
  *     - answer_count: 回答数
  *     - view_count: 浏览数
  *   - detail_text: 热度文本（如 "1234 万热度"）
@@ -58,8 +61,7 @@ interface ZhihuHotItem {
 interface ZhihuApiResponse {
   data?: Array<{
     target?: {
-      id?: string | number;        // 问题ID
-      title?: string;              // 问题标题
+      title?: string;              // 标题
       answer_count?: number;       // 回答数
       view_count?: number;         // 浏览数
     };
@@ -74,6 +76,11 @@ interface ZhihuApiResponse {
  * @throws 抓取失败时抛出错误
  */
 export async function fetchZhihuHot(): Promise<ZhihuHotItem[]> {
+  // 测试用：模拟知乎抓取失败
+  if (MOCK_FAIL) {
+    throw new Error('模拟知乎API失败: 503 Service Unavailable (测试用)');
+  }
+
   try {
     const response = await fetch(ZHIHU_API_URL, {
       method: 'GET',
@@ -84,7 +91,7 @@ export async function fetchZhihuHot(): Promise<ZhihuHotItem[]> {
       throw new Error(`HTTP 错误: ${response.status} ${response.statusText}`);
     }
 
-    const result: ZhihuApiResponse = await response.json();
+    const result = await response.json() as ZhihuApiResponse;
 
     // 验证数据结构
     if (!result.data || !Array.isArray(result.data)) {
@@ -95,21 +102,19 @@ export async function fetchZhihuHot(): Promise<ZhihuHotItem[]> {
     // 字段映射（与 TECH_DESIGN.md 一致）：
     // - index + 1           → rank（排名，从1开始）
     // - target.title        → title（标题）
-    // - target.id           → url（构建问题链接）
     // - detail_text         → heat（解析热度数值）
     // - target.answer_count → extra.answerCount（回答数）
     // - target.view_count   → extra.viewCount（浏览数）
     const items: ZhihuHotItem[] = result.data
-      .slice(0, 50) // 只取前 50 条
+      .slice(0, 10) // 只取前 10 条
       .map((item, index) => {
         const rank = index + 1;
         const title = item.target?.title ?? '无标题';
-        const questionId = item.target?.id ?? '';
 
-        // 构建完整 URL
-        const url = questionId
-          ? `https://www.zhihu.com/question/${questionId}`
-          : 'https://www.zhihu.com';
+        // 构建搜索URL（使用标题作为搜索关键词）
+        // 这样无论内容类型是什么，都能跳转到相关页面
+        const searchQuery = encodeURIComponent(title);
+        const url = `https://www.zhihu.com/search?type=content&q=${searchQuery}`;
 
         // 解析热度数值
         // detail_text 格式: "1234 万热度" 或 "1234 热度"
