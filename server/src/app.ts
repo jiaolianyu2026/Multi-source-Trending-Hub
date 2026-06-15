@@ -14,8 +14,10 @@ const PORT = process.env.PORT || 3001;
 
 // 配置 CORS
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',') || [
-  'http://localhost:5173',  // 开发端口
-  'http://localhost:4173',  // 生产预览端口
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:4173',
+  'https://multi-source-trending-24ucq03ig-echo-s-projects2026.vercel.app',
 ];
 
 app.use(cors({
@@ -523,6 +525,6 @@ async function handleBilibiliRequest(req: express.Request, res: express.Response
 }
 
 // 启动服务
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
 });

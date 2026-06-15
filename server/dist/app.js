@@ -13,7 +13,7 @@ const bilibili_1 = require("./services/bilibili");
 // 调试：检查环境变量是否加载
 console.log('[debug] ZHIHU_COOKIE loaded:', process.env.ZHIHU_COOKIE ? 'YES (长度:' + process.env.ZHIHU_COOKIE.length + ')' : 'NO');
 const app = (0, express_1.default)();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 // 配置 CORS
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',') || [
     'http://localhost:5173', // 开发端口
