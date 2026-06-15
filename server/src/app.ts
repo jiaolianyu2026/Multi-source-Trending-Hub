@@ -10,7 +10,7 @@ import { fetchBilibiliHot } from './services/bilibili';
 console.log('[debug] ZHIHU_COOKIE loaded:', process.env.ZHIHU_COOKIE ? 'YES (长度:' + process.env.ZHIHU_COOKIE.length + ')' : 'NO');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // 配置 CORS
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',') || [
