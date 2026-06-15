@@ -7,7 +7,7 @@ WORKDIR /app
 # 复制 package.json 和 package-lock.json
 COPY package*.json ./
 
-# 安装所有依赖（包括 devDependencies，用于 TypeScript 编译）
+# 安装所有依赖
 RUN npm ci
 
 # 复制源代码
@@ -15,9 +15,6 @@ COPY . .
 
 # 构建 TypeScript
 RUN npm run build
-
-# 移除 devDependencies，只保留生产依赖
-RUN npm prune --omit=dev
 
 # 暴露端口
 EXPOSE 3000
@@ -27,4 +24,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # 启动命令
-CMD ["npm", "run", "start"]
+CMD ["node", "dist/app.js"]
